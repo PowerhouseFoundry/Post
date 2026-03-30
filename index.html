@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post & Bills Simulator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-main">
+        <p class="eyebrow">Financial literacy simulator</p>
+        <div class="topbar-row">
+          <div>
+            <h1>Your post</h1>
+            <p class="subtitle">Tap an envelope to open the letter inside and decide what to do next.</p>
+          </div>
+          <div class="topbar-actions">
+            <button id="showGuideBtn" class="secondary-btn guide-btn" type="button">Decision guide</button>
+            <button id="resetProgressBtn" class="secondary-btn topbar-btn" type="button">Restart</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="setupScreen" class="screen setup-screen active">
+        <div class="setup-stage card">
+          <div class="setup-overlay"></div>
+          <div class="setup-grid">
+       <div class="setup-copy">
+  <p class="section-kicker light">Building post room</p>
+  <h2>Enter your details</h2>
+  <p class="muted light-copy">Add your details so your post is addressed correctly.</p>
+</div>
+
+            <form id="setupForm" class="form-panel glass-panel">
+              <label>
+                <span>Full name</span>
+                <input id="studentName" required placeholder="Jordan Smith" />
+              </label>
+              <label>
+                <span>Address line 1</span>
+                <input id="address1" required placeholder="12 Market Street" />
+              </label>
+              <label>
+                <span>Town or city</span>
+                <input id="address2" required placeholder="Leeds" />
+              </label>
+              <label>
+                <span>Postcode</span>
+                <input id="postcode" required placeholder="LS1 2AB" />
+              </label>
+              <button class="primary-btn full-width" type="submit">Check your post</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="mailScreen" class="screen hidden mail-screen">
+        <div class="legend compact-card">
+          <strong>How to decide:</strong>
+          <span>Check the company, amount, due date and whether the letter says reminder, overdue, confirmation, direct debit, prize draw or final notice.</span>
+        </div>
+
+        <section class="post-wall" aria-label="Post wall">
+          <div class="post-wall-grid" id="mailGrid"></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div id="letterModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close="true"></div>
+    <div class="modal-panel wide">
+      <button class="modal-close" data-close="true" aria-label="Close">×</button>
+      <div class="modal-body split-layout">
+        <article class="letter-paper" id="letterPaper"></article>
+        <aside class="action-panel">
+          <div class="sticky-box">
+            <p class="section-kicker">Choose an action</p>
+            <h3>What should you do?</h3>
+            <p id="letterPrompt" class="muted"></p>
+            <button id="helpBtn" class="secondary-btn full-width" type="button">Click for help</button>
+            <div class="option-list" id="actionOptions"></div>
+            <div id="feedbackBox" class="feedback hidden"></div>
+            <div id="nextStepBox" class="next-step hidden"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <div id="paymentModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-payment="true"></div>
+    <div class="modal-panel medium">
+      <button class="modal-close" data-close-payment="true" aria-label="Close">×</button>
+      <div class="modal-body">
+        <p class="section-kicker">Pay a bill</p>
+        <h3 id="paymentTitle">Make a payment</h3>
+        <p id="paymentDescription" class="muted"></p>
+        <form id="paymentForm" class="form-panel compact" novalidate>
+          <label>
+            <span>Name on card</span>
+            <input id="cardName" required placeholder="Jordan Smith" />
+          </label>
+          <label>
+            <span>Card number</span>
+            <input id="cardNumber" required inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242" />
+            <small class="field-hint">Must be exactly 16 digits.</small>
+          </label>
+          <div class="two-col">
+            <label>
+              <span>Expiry</span>
+              <input id="expiry" required maxlength="5" inputmode="numeric" placeholder="05/28" />
+              <small class="field-hint">Must be 4 digits in MM/YY format.</small>
+            </label>
+            <label>
+              <span>Security code</span>
+              <input id="cvv" required inputmode="numeric" maxlength="3" placeholder="123" />
+              <small class="field-hint">Must be exactly 3 digits.</small>
+            </label>
+          </div>
+          <div id="paymentError" class="feedback error hidden"></div>
+          <button class="primary-btn" type="submit">Submit payment</button>
+        </form>
+        <div id="paymentSuccess" class="feedback success hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ddModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-dd="true"></div>
+    <div class="modal-panel medium">
+      <button class="modal-close" data-close-dd="true" aria-label="Close">×</button>
+      <div class="modal-body">
+        <p class="section-kicker">Set up direct debit</p>
+        <h3 id="ddTitle">Create automatic payment</h3>
+        <p id="ddDescription" class="muted"></p>
+        <form id="ddForm" class="form-panel compact" novalidate>
+          <label>
+            <span>Account holder</span>
+            <input id="accountHolder" required placeholder="Jordan Smith" />
+          </label>
+          <div class="two-col">
+            <label>
+              <span>Sort code</span>
+              <input id="sortCode" required maxlength="8" inputmode="numeric" placeholder="12-34-56" />
+              <small class="field-hint">Must look like 12-34-56.</small>
+            </label>
+            <label>
+              <span>Account number</span>
+              <input id="accountNumber" required maxlength="8" inputmode="numeric" placeholder="12345678" />
+              <small class="field-hint">Must be exactly 8 digits.</small>
+            </label>
+          </div>
+          <label>
+            <span>Payment date each month</span>
+            <select id="paymentDate">
+              <option>1st</option>
+              <option>5th</option>
+              <option>10th</option>
+              <option>15th</option>
+              <option>20th</option>
+              <option>25th</option>
+            </select>
+          </label>
+          <div id="ddError" class="feedback error hidden"></div>
+          <button class="primary-btn" type="submit">Set up direct debit</button>
+        </form>
+        <div id="ddSuccess" class="feedback success hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="guideModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-guide="true"></div>
+    <div class="modal-panel medium">
+      <button class="modal-close" data-close-guide="true" aria-label="Close">×</button>
+      <div class="modal-body">
+        <p class="section-kicker">Decision guide</p>
+        <h3>What should I look for?</h3>
+        <ol class="guide-list">
+          <li>Find the company name and the letter date.</li>
+          <li>Look for words such as <strong>due</strong>, <strong>overdue</strong>, <strong>reminder</strong>, <strong>welcome</strong>, <strong>confirmation</strong>, <strong>direct debit</strong>, <strong>prize draw</strong> or <strong>final notice</strong>.</li>
+          <li>Check whether there is an amount to pay now.</li>
+          <li>If it is a new account, you may need to set up a direct debit instead of paying by card.</li>
+          <li>Some post may be junk or a scam and can be ignored.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
