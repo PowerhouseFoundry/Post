@@ -29,7 +29,7 @@ button, input, select { font: inherit; }
 
 .app-shell {
   width: min(100vw, 1600px);
-  height: 100vh;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 18px;
   display: flex;
@@ -248,13 +248,11 @@ select.invalid {
 }
 
 .post-wall-grid {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  inset: auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
-
-  /* CLEANER SPACING */
   padding: 40px;
   gap: 30px;
 }
@@ -422,7 +420,89 @@ select.invalid {
   grid-template-columns: 1.16fr 0.84fr;
   gap: 22px;
 }
+@media (max-width: 900px) {
+  .modal-panel.wide {
+    width: min(96vw, 900px);
+  }
 
+  .split-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .modal-body {
+    padding: 18px;
+  }
+
+  .letter-paper {
+    min-height: auto;
+    padding: 22px;
+  }
+
+  .sticky-box {
+    position: static;
+    top: auto;
+  }
+}
+@media (max-width: 600px) {
+  .modal-panel.wide,
+  .modal-panel.medium {
+    width: 100vw;
+    max-width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .modal-body {
+    padding: 14px;
+  }
+
+  .letter-paper {
+    padding: 16px;
+    border-radius: 8px;
+  }
+
+  .letter-head {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+  }
+
+  .company-line {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .company-line img,
+  .company-line .company-logo-fallback {
+    width: 150px;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .subject-line {
+    font-size: 1rem;
+  }
+
+  .letter-body p,
+  .recipient-box,
+  .company-mark p,
+  .letter-meta p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .sticky-box {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .option-btn {
+    padding: 13px 14px;
+  }
+}
 .letter-paper {
   background: #fffefc;
   border: 1px solid #e2dccf;
@@ -600,15 +680,13 @@ select.invalid {
     display: grid;
   }
 
-  .topbar-actions { display: flex; }
-
-  .post-wall-grid {
-    padding: 8% 5.5% 11%;
-    column-gap: 3%;
-    row-gap: 14%;
+  .topbar-actions {
+    display: flex;
   }
 
-  .window { font-size: 0.66rem; }
+  .window {
+    font-size: 0.66rem;
+  }
 }
 
 @media (max-width: 900px) {
@@ -617,15 +695,48 @@ select.invalid {
     min-height: 100vh;
   }
 
-  .post-wall { min-height: 700px; }
-.post-wall-grid {
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  padding: 20px;
-  gap: 16px;
-}
+  .mail-screen {
+    gap: 12px;
+  }
 
-  .legend { font-size: 0.92rem; }
+  .legend {
+    font-size: 0.92rem;
+    padding: 12px 14px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .post-wall {
+    min-height: auto;
+    background-position: center top;
+    padding: 12px;
+    overflow: hidden;
+  }
+
+  .post-wall-grid {
+    position: relative;
+    inset: auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, auto);
+    padding: 0;
+    gap: 14px;
+  }
+
+  .envelope {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2.15 / 1;
+    align-self: auto;
+    justify-self: stretch;
+  }
+
+  .window {
+    font-size: 0.72rem;
+  }
+
+  .mail-ref {
+    font-size: 0.82rem;
+  }
 }
 #helpBtn {
   background: #eef3fb;
@@ -869,5 +980,72 @@ select.invalid {
     min-height: 52px;
     font-size: 1rem;
     font-weight: 800;
+  }
+}
+@media (max-width: 600px) {
+  .mail-screen {
+    gap: 10px;
+  }
+
+  .legend {
+    padding: 10px 12px;
+    border-radius: 16px;
+    font-size: 0.9rem;
+  }
+
+  .legend strong {
+    white-space: normal;
+  }
+
+  .post-wall {
+    min-height: auto;
+    border-radius: 16px;
+    padding: 10px;
+    background-position: center top;
+    background-size: cover;
+  }
+
+  .post-wall-grid {
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, auto);
+    gap: 12px;
+    padding: 0;
+  }
+
+  .envelope {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 2.1 / 1;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.16);
+  }
+
+  .envelope .company-logo {
+    width: 19%;
+    height: 15%;
+  }
+
+  .window {
+    left: 12%;
+    top: 41%;
+    width: 28%;
+    font-size: 0.72rem;
+    line-height: 1.05;
+  }
+
+  .mail-tag {
+    top: 33%;
+    right: 4%;
+    font-size: 0.72rem;
+  }
+
+  .mail-ref {
+    right: 5%;
+    bottom: 8%;
+    font-size: 0.78rem;
+  }
+
+  .status-chip {
+    padding: 6px 10px;
+    font-size: 0.76rem;
   }
 }
